@@ -1,0 +1,29 @@
+{
+    "$schema": "../../app.schema",
+    "$type": "Microsoft.AdaptiveDialog",
+    "steps": [
+        {
+            "$type": "Microsoft.TextInput",
+            "prompt": "What do you want to insert?",
+            "property": "user.title"
+        },
+        {
+            "$type": "Microsoft.TextInput",
+            "prompt": "in what list?",
+            "property": "user.listType"
+        },
+        {
+            "$type": "Microsoft.EditArray",
+            "$designer": {
+                "error": "user[user.listType] is not supported as an expression here but it does work in LG"
+            },
+            "arrayProperty": "user.{user.listType}",
+            "changeType": "Push",
+            "itemProperty": "user.title"
+        },
+        {
+            "$type": "Microsoft.SendActivity",
+            "activity": "Done. I've added {user.title} to the {user.listType} list. You now have {count(user[user.listType])} items in your list!"
+        }
+    ]
+}
