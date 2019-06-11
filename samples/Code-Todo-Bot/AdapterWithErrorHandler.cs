@@ -21,7 +21,7 @@ namespace Microsoft.BotBuilderSamples
         {
             this.UseStorage(storage);
             this.UseState(userState, conversationState);
-            //this.UseLanguageGeneration(resourceExplorer);
+            this.Use(new RegisterClassMiddleware<IMessageActivityGenerator>(new TextMessageActivityGenerator()));
             this.UseDebugger(configuration.GetValue<int>("debugport", 4712));
 
             OnTurnError = async (turnContext, exception) =>
