@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/EchoBot.csproj"
+                "${workspaceFolder}/todo-with-luis.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -17,7 +17,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/EchoBot.csproj"
+                "${workspaceFolder}/todo-with-luis.csproj"
             ],
             "problemMatcher": "$tsc"
         },
@@ -28,7 +28,7 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/EchoBot.csproj"
+                "${workspaceFolder}/todo-with-luis.csproj"
             ],
             "problemMatcher": "$tsc"
         }

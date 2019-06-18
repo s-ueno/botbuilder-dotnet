@@ -545,11 +545,6 @@
       "entities": []
     },
     {
-      "text": "add papaya to shopping",
-      "intent": "None",
-      "entities": []
-    },
-    {
       "text": "Remove todo",
       "intent": "None",
       "entities": []

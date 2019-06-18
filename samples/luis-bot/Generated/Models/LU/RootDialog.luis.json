@@ -23,6 +23,10 @@
     {
       "name": "itemTitle",
       "roles": []
+    },
+    {
+      "name": "todoIdx",
+      "roles": []
     }
   ],
   "composites": [],
@@ -434,17 +438,6 @@
       ]
     },
     {
-      "text": "add papaya to shopping",
-      "intent": "Add todo",
-      "entities": [
-        {
-          "entity": "itemTitle",
-          "startPos": 4,
-          "endPos": 9
-        }
-      ]
-    },
-    {
       "text": "Remove todo",
       "intent": "DeleteToDoDialog",
       "entities": []
@@ -511,7 +504,13 @@
     {
       "text": "I finished the last todo",
       "intent": "DeleteToDoDialog",
-      "entities": []
+      "entities": [
+        {
+          "entity": "todoIdx",
+          "startPos": 15,
+          "endPos": 18
+        }
+      ]
     },
     {
       "text": "Remove the first todo",

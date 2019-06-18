@@ -15,7 +15,7 @@ Install ludown from here - https://github.com/Microsoft/botbuilder-tools/tree/vi
 Once you have the latest ludown and lubuild CLI installed, simply run these two commands any time your .lu models change.
 
 ```bash
-> cd samples\luis-bot\
+> cd 70.luis-todo-bot
 > ludown parse tosuggest -f Dialogs -o generated -r RootDialog -e -q -u --verbose
 > cd bin
 > lubuild --authoringKey <YOUR-LUIS-KEY> --dialogs

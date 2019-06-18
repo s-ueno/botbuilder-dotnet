@@ -2,7 +2,7 @@
 - Ok, which item you would like to delete?\n\[Suggestions=Help | Cancel\]
 
 # Delete-readBack
-- Ok, I've removed "{dialog.itemTitle}" from your {dialog.listType} list.
+- Ok, I've removed your todo titled "{dialog.itemTitle}".
 
 # Delete-Empty-List
 - You do not have any items in your {dialog.listType} list.
@@ -11,9 +11,4 @@
 - Sorry, I did not find a todo titled {dialog.itemTitle} in your todos list.
 
 # Get-List-Type-delete
-- Please pick the list type to remove the item from\n\[Suggestions=Todo [Item-count(user.lists.todo)] | Grocery [Item-count(user.lists.grocery)] | Shopping [Item-count(user.lists.shopping)] | Cancel]
-
-
-
-# Item-Not-Found-In-Type
-- Sorry, I did not find "{@itemTitle[0]}" in your {@listType[0][0]} list.
+- Please pick the list type to remove the item from\n\[Suggestions=Todo | Grocery | Shopping\]

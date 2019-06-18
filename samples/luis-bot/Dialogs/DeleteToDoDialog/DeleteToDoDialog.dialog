@@ -5,26 +5,28 @@
     "steps": [
         {
             "$type": "Microsoft.SetProperty",
-            "value": "@listType[0][0]",
-            "property": "dialog.listType"
-        },
-        {
-            "$type": "Microsoft.BeginDialog",
-            "dialog": "GetTitleToDelete"
-        },
-        {
-            "$type": "Microsoft.SetProperty",
             "value": "@itemTitle[0]",
             "property": "dialog.itemTitle"
         },
         {
-            "$type": "Microsoft.TextInput",
+            "$type": "Microsoft.SetProperty",
+            "value": "@listType[0][0]",
+            "property": "dialog.listType"
+        },
+        {
+            "$type": "Microsoft.ChoiceInput",
+            "choices": [
+                {"value": "Todo"},
+                {"value": "Shopping"},
+                {"value": "Grocery"}
+            ],
             "property": "dialog.listType",
-            "prompt": "[Get-List-Type-delete]"
+            "prompt": "[Get-List-Type-delete]",
+            "retryPrompt": "Sorry, that does not work. Let's try again..\\n[Get-List-Type-delete]"
         },
         {
             "$type": "Microsoft.IfCondition",
-            "condition": "user.lists[dialog.listType] == null || count(user.lists[dialog.listType]) <= 0",
+            "condition": "user.lists.{dialog.listType} == null || count(user.lists.{dialog.listType}) <= 0",
             "steps": [
                 {
                     "$type": "Microsoft.SendActivity",
@@ -40,13 +42,19 @@
             ]
         },
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[Show-List]"
+            "$type": "Microsoft.TextInput",
+            "prompt": "[Get-ToDo-Title-To-Delete]",
+            "property": "dialog.itemTitle"
+        },
+        {
+            "$type": "Microsoft.BeginDialog",
+            "dialog": "ViewToDoDialog"
         },
         {
             "$type": "Microsoft.TextInput",
             "prompt": "[Get-ToDo-Title-To-Delete]",
-            "property": "dialog.itemTitle"
+            "property": "dialog.itemTitle",
+            "retryPrompt": "[Retry-Item-Title-To-Delete]"
         },
         {
             "$type": "Microsoft.EditArray",
@@ -59,8 +67,8 @@
             "activity": "[Delete-readBack]"
         },
         {
-            "$type": "Microsoft.SendActivity",
-            "activity": "[Show-List]"
+            "$type": "Microsoft.BeginDialog",
+            "dialog": "ViewToDoDialog"
         },
         {
             "$type": "Microsoft.EndDialog"
@@ -78,24 +86,47 @@
                 },
                 {
                     "$type": "Microsoft.IfCondition",
-                    "condition": "dialog.listType != null && @listType == null",
+                    "condition": "@itemTitle[0] != null && contains(user.lists.{dialog.listType}, @itemTitle[0])",
                     "steps": [
                         {
                             "$type": "Microsoft.SetProperty",
-                            "value": "createArray(createArray(dialog.listType))",
-                            "property": "turn.entities.listType"
+                            "value": "@itemTitle[0]",
+                            "property": "dialog.itemTitle"
+                        },
+                        {
+                            "$type": "Microsoft.EndDialog"
                         }
                     ]
                 },
                 {
-                    "$type": "Microsoft.BeginDialog",
-                    "dialog": "GetTitleToDelete"
+                    "$type": "Microsoft.IfCondition",
+                    "condition": "@ordinal[0] != null && user.lists.{dialog.listType}[int(@ordinal[0]) - 1] != null",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "dialog.itemTitle",
+                            "value": "user.lists.{dialog.listType}[int(@ordinal[0]) - 1]"
+                        }
+                    ]
                 },
                 {
-                    "$type": "Microsoft.SetProperty",
-                    "value": "@itemTitle[0]",
-                    "property": "dialog.itemTitle"
+                    "$type": "Microsoft.IfCondition",
+                    "condition": "@itemTitle[0] == null && @ordinal[0] == null && contains(user.lists.{dialog.listType}, turn.activity.text)",
+                    "steps": [
+                        {
+                            "$type": "Microsoft.SetProperty",
+                            "property": "dialog.itemTitle",
+                            "value": "turn.activity.text"
+                        }
+                    ]
                 }
+            ]
+        },
+        {
+            "$type": "Microsoft.IntentRule",
+            "constraint": "turn.dialogEvent.value.intents.None.score <= 0.6",
+            "steps": [
+                
             ]
         }
     ]

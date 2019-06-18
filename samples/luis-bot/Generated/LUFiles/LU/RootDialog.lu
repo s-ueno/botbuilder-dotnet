@@ -64,7 +64,6 @@
 - can you please add {itemTitle=milk} to the grocery list?
 - {itemTitle=remember to check the water pump}
 - add {itemTitle=check the water pump this weekend}
-- add {itemTitle=papaya} to shopping
 - Please remember [to] {itemTitle}
 - I need you to remember [that] {itemTitle}
 - add a todo named {itemTitle}
@@ -85,7 +84,7 @@
 - remove
 - clear my todo named {itemTitle=get a new car}
 - I'm done with the first todo
-- I finished the last todo
+- I finished the {todoIdx=last} todo
 - Remove the first todo
 - Delete todo
 - Clear my todos
@@ -128,6 +127,8 @@
 > # Entity definitions
 
 $itemTitle:simple
+
+$todoIdx:simple
 
 
 > # PREBUILT Entity definitions

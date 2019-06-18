@@ -2,41 +2,14 @@
 > # Intent definitions
 
 ## GetItemToDelete
-- the first one
-- last one
-- its the last one
-- I would like to delete the second item in my list
 - I need to delete {itemTitle=buy milk}
 - I have completed {itemTitle=finish this demo}
 - remove the item with title {itemTitle=water the yard}
-- todo
-- grocery
-- shopping
-- to do list
-- remove it to my shopping list
-- please remove from the shopping list
-- that would be grocery
-- remove an item from the todo list
-- that would be the todo list
-- how about the shopping list
-- I would like to delete an item from the shopping list
 - {itemTitle=buy milk} is my todo's title
 - {itemTitle=pick up joe at 3pm} is the title of my todo
 - the title is {itemTitle=Eat when you are hungry}
 - yup, its {itemTitle=do groceries this weekend}
 - it is "{itemTitle=learn to dance}"
-- {itemTitle=prep for meeting with John}
-- {itemTitle=water plants on saturday}
-- {itemTitle=do groceries}
-- {itemTitle=pick up Ben on the way home}
-- {itemTitle=call mom}
-- {itemTitle=get dog treats}
-- {itemTitle=pick up joe at 3pm}
-- {itemTitle=Eat when you are hungry}
-- {itemTitle=water the garden tomorrow}
-- {itemTitle=do groceries this weekend}
-- {itemTitle=learn to dance}
-- {itemTitle=apple}
 - remove {itemTitle=banana} from the shopping list
 - delete {itemTitle=orange} from the grocery list
 - check off {itemTitle=eat} from the todo list
@@ -87,9 +60,6 @@
 - delete {itemTitle} from the {listType} list
 - erase {itemTitle} from the list
 - [(remove|that would be)] ["]{itemTitle}["] from [(my|the)] {listType}
-- Grocery [**] {count} (item|items) [**]
-- Todo [**] {count} (item|items) [**]
-- Shopping [**] {count} (item|items) [**]
 - I did {itemTitle}
 - I completed {itemTitle}
 - Mark {itemTitle} as complete
@@ -153,7 +123,6 @@
 - can you please add milk to the grocery list?
 - remember to check the water pump
 - add check the water pump this weekend
-- add papaya to shopping
 - show my todo
 - can you please show my todos?
 - please show my todo list
@@ -178,6 +147,8 @@
 > # Entity definitions
 
 $itemTitle:simple
+
+$todoIdx:simple
 
 
 > # PREBUILT Entity definitions
