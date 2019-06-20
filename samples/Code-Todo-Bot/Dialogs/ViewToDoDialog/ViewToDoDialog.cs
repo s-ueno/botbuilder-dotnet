@@ -14,7 +14,7 @@ namespace Microsoft.BotBuilderSamples
         public ViewToDoDialog()
             : base(nameof(ViewToDoDialog))
         {
-            _lgEngine = TemplateEngine.FromFiles(
+            _lgEngine = new TemplateEngine().AddFiles(
                 new string[]
                 {
                     Path.Combine(new string[] { ".", "Dialogs", "ViewToDoDialog", "ViewToDoDialog.lg" }),
@@ -23,7 +23,7 @@ namespace Microsoft.BotBuilderSamples
             // Create instance of adaptive dialog. 
             var ViewToDoDialog = new AdaptiveDialog(nameof(AdaptiveDialog))
             {
-                Generator = new TemplateEngineLanguageGenerator("ViewToDoDialog.lg", _lgEngine),
+                Generator = new TemplateEngineLanguageGenerator(_lgEngine),
 
                 Steps = new List<IDialog>()
                 {

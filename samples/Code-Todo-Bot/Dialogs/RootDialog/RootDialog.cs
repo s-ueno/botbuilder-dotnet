@@ -23,14 +23,14 @@ namespace Microsoft.BotBuilderSamples
             Configuration = configuration;
             string[] paths = { ".", "Dialogs", "RootDialog", "RootDialog.lg" };
             string fullPath = Path.Combine(paths);
-            _lgEngine = TemplateEngine.FromFiles(fullPath);
+            _lgEngine = new TemplateEngine().AddFile(fullPath);
             // Create instance of adaptive dialog. 
             var rootDialog = new AdaptiveDialog(nameof(AdaptiveDialog))
             {
                 // Create a LUIS recognizer.
                 // The recognizer is built using the intents, utterances, patterns and entities defined in ./RootDialog.lu file
                 Recognizer = CreateRecognizer(),
-                Generator = new TemplateEngineLanguageGenerator("RootDialog.lg", _lgEngine),
+                Generator = new TemplateEngineLanguageGenerator(_lgEngine),
                 Rules = new List<IRule>()
                 {
                     // Intent rules for the LUIS model. Each intent here corresponds to an intent defined in ./Dialogs/Resources/ToDoBot.lu file
@@ -45,6 +45,20 @@ namespace Microsoft.BotBuilderSamples
                             new SendActivity("Cancelling all dialogs.."),
                             new SendActivity("[Welcome-Actions]"),
                             new CancelAllDialogs(),
+                        }
+                    },
+                    new EventRule() {
+                        Events = new List<string>() { 
+                            AdaptiveEvents.ActivityReceived,
+                            AdaptiveEvents.RecognizedIntent,
+                            AdaptiveEvents.UnknownIntent,
+                            AdaptiveEvents.SequenceStarted,
+                            AdaptiveEvents.SequenceEnded,
+                            AdaptiveEvents.ConversationMembersAdded
+                        },
+                        Steps = new List<IDialog>() {
+                            new SendActivity("Event type:: {turn.dialogEvent.name}"),
+                            new SendActivity("Event payload:: {turn.dialogEvent}")
                         }
                     }
                 }
