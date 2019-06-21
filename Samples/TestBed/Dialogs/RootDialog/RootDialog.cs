@@ -33,30 +33,30 @@ namespace Microsoft.BotBuilderSamples
                 Generator = new TemplateEngineLanguageGenerator(_lgEngine),
                 Rules = new List<IRule>()
                 {
-                    new EventRule() {
-                        Events = new List<string>() { 
-                            AdaptiveEvents.ConversationMembersAdded
+                    //new EventRule() {
+                    //    Events = new List<string>() { 
+                    //        AdaptiveEvents.ConversationMembersAdded
+                    //    },
+                    //    Steps = new List<IDialog>() {
+                    //        new SendActivity("ConversationMembersAdded!"),
+                    //        new SendActivity("Event type:: {turn.dialogEvent.name}"),
+                    //        new SendActivity("Event payload:: {turn.dialogEvent}")
+                    //    }
+                    //},
+                    new EventRule()
+                    {
+                        Events = new List<string>()
+                        {
+                            AdaptiveEvents.BeginDialog
                         },
-                        Steps = new List<IDialog>() {
-                            new SendActivity("ConversationMembersAdded!"),
+                        Steps = new List<IDialog>()
+                        {
+                            new SendActivity("BeginDialog!"),
                             new SendActivity("Event type:: {turn.dialogEvent.name}"),
                             new SendActivity("Event payload:: {turn.dialogEvent}")
                         }
-                    },
-                    //new EventRule()
-                    //{
-                    //    Events = new List<string>()
-                    //    {
-                    //        AdaptiveEvents.BeginDialog
-                    //    },
-                    //    Steps = new List<IDialog>()
-                    //    {
-                    //        new SendActivity("BeginDialog!"),
-                    //        new SendActivity("Event type [AD]:: {turn.dialogEvent.name}"),
-                    //        new SendActivity("Event payload [AD]:: {turn.dialogEvent}")
-                    //    }
 
-                    //}
+                    }
                 }
             };
 
