@@ -19,7 +19,7 @@ namespace Microsoft.BotBuilderSamples
         public DeleteToDoDialog()
             : base(nameof(DeleteToDoDialog))
         {
-            _lgEngine = TemplateEngine.FromFiles(
+            _lgEngine = new TemplateEngine().AddFiles(
                 new string[]
                 {
                     Path.Combine(new string[] { ".", "Dialogs", "DeleteToDoDialog", "DeleteToDoDialog.lg" }),
@@ -29,7 +29,7 @@ namespace Microsoft.BotBuilderSamples
             // Create instance of adaptive dialog. 
             var DeleteToDoDialog = new AdaptiveDialog(nameof(AdaptiveDialog))
             {
-                Generator = new TemplateEngineLanguageGenerator("DeleteToDoDialog.lg", _lgEngine),
+                Generator = new TemplateEngineLanguageGenerator(_lgEngine),
                 Steps = new List<IDialog>()
                 {
                     // Handle case where there are no items in todo list
@@ -85,31 +85,11 @@ namespace Microsoft.BotBuilderSamples
                     new EditArray()
                     {
                         ArrayProperty = "user.todos",
-                        ItemProperty = "turn.todoTitle",
+                        Value = new ExpressionEngine().Parse("turn.todoTitle"),
                         ChangeType = EditArray.ArrayChangeType.Clear
                     },
                     new SendActivity("[Delete-readBack]"),
                     new EndDialog()
-                },
-                Rules = new List<IRule>()
-                {
-                    // This event rule will catch outgoing bubbling up to the parent and will swallow anything that user says that is in the todo list. 
-                    new EventRule()
-                    {
-                        // Consultation happens on every turn when using TextInput. This gives all parents a chance to take the user input before text input takes it.
-                        Events = new List<string>() { AdaptiveEvents.ConsultDialog },
-                        // The expression language is quite powerful with a bunch of pre-built utility functions.
-                        // See https://github.com/Microsoft/BotBuilder-Samples/blob/master/experimental/common-expression-language/prebuilt-functions.md
-                        Constraint = "contains(user.todos, turn.activity.text)",
-                        Steps = new List<IDialog>()
-                        {
-                            // Take user input  as the title of the todo to delete if it exists
-                            new SetProperty() {
-                                Property = "turn.todoTitle",
-                                Value = new ExpressionEngine().Parse("turn.activity.text")
-                            }
-                        }
-                    }
                 }
             };
 

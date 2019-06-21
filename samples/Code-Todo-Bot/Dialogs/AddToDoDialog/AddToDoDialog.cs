@@ -20,7 +20,7 @@ namespace Microsoft.BotBuilderSamples
         public AddToDoDialog()
             : base(nameof(AddToDoDialog))
         {
-            _lgEngine = TemplateEngine.FromFiles(
+            _lgEngine = new TemplateEngine().AddFiles(
                 new string[]
                 {
                     Path.Combine(new string[] { ".", "Dialogs", "AddToDoDialog", "AddToDoDialog.lg" }),
@@ -31,7 +31,7 @@ namespace Microsoft.BotBuilderSamples
             {
                 // Create and use a regex recognizer on the child
                 Recognizer = CreateRecognizer(),
-                Generator = new TemplateEngineLanguageGenerator("AddToDoDialog.lg", _lgEngine),
+                Generator = new TemplateEngineLanguageGenerator(_lgEngine),
                 Steps = new List<IDialog>()
                 {
                     // Take todo title if we already have it from root dialog's LUIS model.
@@ -41,13 +41,13 @@ namespace Microsoft.BotBuilderSamples
                     // @EntityName is a short-hand for turn.entities.<EntityName>. Other useful short-hands are 
                     //     #IntentName is a short-hand for turn.intents.<IntentName>
                     //     $PropertyName is a short-hand for dialog.results.<PropertyName>
-                    new SaveEntity() {
+                    new SetProperty() {
                         Property = "turn.todoTitle",
-                        Entity = "@todoTitle[0]"
+                        Value = new ExpressionEngine().Parse("@todoTitle[0]")
                     },
-                    new SaveEntity() {
+                    new SetProperty() {
                         Property = "turn.todoTitle",
-                        Entity = "@todoTitle_patternAny[0]"
+                        Value = new ExpressionEngine().Parse("@todoTitle_patternAny[0]")
                     },
                     // TextInput by default will skip the prompt if the property has value.
                     new TextInput()
@@ -58,7 +58,7 @@ namespace Microsoft.BotBuilderSamples
                     // Add the new todo title to the list of todos. Keep the list of todos in the user scope.
                     new EditArray()
                     {
-                        ItemProperty = "turn.todoTitle",
+                        Value = new ExpressionEngine().Parse("turn.todoTitle"),
                         ArrayProperty = "user.todos",
                         ChangeType = EditArray.ArrayChangeType.Push
                     },
