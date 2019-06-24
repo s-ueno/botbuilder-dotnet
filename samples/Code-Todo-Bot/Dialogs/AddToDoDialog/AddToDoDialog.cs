@@ -1,25 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Dialogs.Adaptive;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Input;
-using Microsoft.Bot.Builder.Dialogs.Adaptive.Recognizers;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Rules;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Steps;
 using Microsoft.Bot.Builder.Expressions.Parser;
 using Microsoft.Bot.Builder.LanguageGeneration;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.BotBuilderSamples
 {
     public class AddToDoDialog : ComponentDialog
     {
         private TemplateEngine _lgEngine;
+        private static IConfiguration Configuration;
 
-        public AddToDoDialog()
+
+        public AddToDoDialog(IConfiguration configuration)
             : base(nameof(AddToDoDialog))
         {
+            Configuration = configuration;
+
             _lgEngine = new TemplateEngine().AddFiles(
                 new string[]
                 {
@@ -53,7 +58,8 @@ namespace Microsoft.BotBuilderSamples
                     new TextInput()
                     {
                         Property = "turn.todoTitle",
-                        Prompt = new ActivityTemplate("[Get-ToDo-Title]")
+                        Prompt = new ActivityTemplate("[Get-ToDo-Title]"),
+                        AllowInterruptions = true
                     },
                     // Add the new todo title to the list of todos. Keep the list of todos in the user scope.
                     new EditArray()
@@ -128,14 +134,16 @@ namespace Microsoft.BotBuilderSamples
 
         private static IRecognizer CreateRecognizer()
         {
-            return new RegexRecognizer()
+            if (string.IsNullOrEmpty(Configuration["LuisAppId"]) || string.IsNullOrEmpty(Configuration["LuisAPIKey"]) || string.IsNullOrEmpty(Configuration["LuisAPIHostName"]))
             {
-                Intents = new Dictionary<string, string>()
-                {
-                    { "Help", "(?i)help" },
-                    { "Cancel", "(?i)cancel|never mind" }
-                }
-            };
+                throw new Exception("Your LUIS application is not configured. Please see README.MD to set up a LUIS application.");
+            }
+            return new LuisRecognizer(new LuisApplication()
+            {
+                Endpoint = Configuration["LuisAPIHostName"],
+                EndpointKey = Configuration["LuisAPIKey"],
+                ApplicationId = Configuration["LuisAppId"]
+            });
         }
     }
 }

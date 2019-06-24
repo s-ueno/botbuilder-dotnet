@@ -46,20 +46,6 @@ namespace Microsoft.BotBuilderSamples
                             new SendActivity("[Welcome-Actions]"),
                             new CancelAllDialogs(),
                         }
-                    },
-                    new EventRule() {
-                        Events = new List<string>() { 
-                            AdaptiveEvents.ActivityReceived,
-                            AdaptiveEvents.RecognizedIntent,
-                            AdaptiveEvents.UnknownIntent,
-                            AdaptiveEvents.SequenceStarted,
-                            AdaptiveEvents.SequenceEnded,
-                            AdaptiveEvents.ConversationMembersAdded
-                        },
-                        Steps = new List<IDialog>() {
-                            new SendActivity("Event type:: {turn.dialogEvent.name}"),
-                            new SendActivity("Event payload:: {turn.dialogEvent}")
-                        }
                     }
                 }
             };
@@ -68,7 +54,7 @@ namespace Microsoft.BotBuilderSamples
             AddDialog(rootDialog);
 
             // Add all child dialogS
-            AddDialog(new AddToDoDialog());
+            AddDialog(new AddToDoDialog(Configuration));
             AddDialog(new DeleteToDoDialog());
             AddDialog(new ViewToDoDialog());
 

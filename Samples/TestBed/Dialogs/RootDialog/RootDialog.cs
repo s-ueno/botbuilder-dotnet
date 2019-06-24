@@ -9,6 +9,9 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive.Rules;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Steps;
 using Microsoft.Bot.Builder.LanguageGeneration;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Formatters.Internal;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Input;
+using Microsoft.Bot.Builder.Expressions.Parser;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -25,43 +28,71 @@ namespace Microsoft.BotBuilderSamples
             string fullPath = Path.Combine(paths);
             _lgEngine = new TemplateEngine().AddFile(fullPath);
             // Create instance of adaptive dialog. 
+            //var rootDialog = new AdaptiveDialog(nameof(AdaptiveDialog))
+            //{
+            //    // Create a LUIS recognizer.
+            //    // The recognizer is built using the intents, utterances, patterns and entities defined in ./RootDialog.lu file
+            //    Recognizer = CreateRecognizer(),
+            //    Generator = new TemplateEngineLanguageGenerator(_lgEngine),
+            //    Rules = new List<IRule>()
+            //    {
+            //        new IntentRule()
+            //        {
+            //            Intent = "Greeting",
+            //            Steps = new List<IDialog>()
+            //            {
+            //                new BeginDialog(nameof(Child1))
+            //                {
+            //                    Options = new {
+            //                        Caller = "RootDialog"
+            //                    }
+            //                },
+            //                new SendActivity()
+            //                {
+            //                    Activity = new ActivityTemplate("Hello {user.name}!! This is a greeting from root dialog.")
+            //                }
+            //            }
+            //        },
+            //        new IntentRule()
+            //        {
+            //            Intent = "Cancel",
+            //            Steps = new List<IDialog>()
+            //            {
+            //                new SendActivity("Cancelling ... "),
+            //                new CancelAllDialogs()
+            //            }
+            //        }
+            //    }
+            //};
+
             var rootDialog = new AdaptiveDialog(nameof(AdaptiveDialog))
             {
-                // Create a LUIS recognizer.
-                // The recognizer is built using the intents, utterances, patterns and entities defined in ./RootDialog.lu file
-                Recognizer = CreateRecognizer(),
-                Generator = new TemplateEngineLanguageGenerator(_lgEngine),
-                Rules = new List<IRule>()
+                Generator = new TemplateEngineLanguageGenerator(),
+                Steps = new List<IDialog>()
                 {
-                    //new EventRule() {
-                    //    Events = new List<string>() { 
-                    //        AdaptiveEvents.ConversationMembersAdded
-                    //    },
-                    //    Steps = new List<IDialog>() {
-                    //        new SendActivity("ConversationMembersAdded!"),
-                    //        new SendActivity("Event type:: {turn.dialogEvent.name}"),
-                    //        new SendActivity("Event payload:: {turn.dialogEvent}")
-                    //    }
-                    //},
-                    new EventRule()
+                    new IfCondition()
                     {
-                        Events = new List<string>()
-                        {
-                            AdaptiveEvents.BeginDialog
-                        },
+                        Condition = new ExpressionEngine().Parse("user.name != null"),
                         Steps = new List<IDialog>()
                         {
-                            new SendActivity("BeginDialog!"),
-                            new SendActivity("Event type:: {turn.dialogEvent.name}"),
-                            new SendActivity("Event payload:: {turn.dialogEvent}")
+                            new SendActivity("Hello, {user.name}")
                         }
-
+                    },
+                    new TextInput()
+                    {
+                        Prompt = new ActivityTemplate("What is your name?"),
+                        Property = "user.name",
+                    },
+                    new SendActivity()
+                    {
+                        Activity = new ActivityTemplate("Hello {user.name}, nice to meet you!")
                     }
                 }
             };
 
             // Add named dialogs to the DialogSet. These names are saved in the dialog state.
             AddDialog(rootDialog);
+            AddDialog(new Child1());
 
             // The initial child Dialog to run.
             InitialDialogId = nameof(AdaptiveDialog);
