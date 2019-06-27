@@ -31,6 +31,8 @@ Foreach ($i in $analyzeArgs) { Write-Host "  $i" }
 Write-Host "Upload coverage [$coverageUploader] with args"
 if (Test-Path env:System_PullRequest_SourceBranch) {
     $branchName = $env:System_PullRequest_SourceBranch -replace "refs/heads/", "" }
+# Strip any newlines, carriage returns from the --commitMessage argument.
+$commitMessage = "$env:Build_SourceVersionMessage" -replace '\s+', ' '
 $uploadArgs = @(
     "--dynamiccodecoverage",
     "-i ""$pathToCoverageFiles\coverage.coveragexml""",
@@ -42,7 +44,7 @@ $uploadArgs = @(
     "--commitId ""$env:Build_SourceVersion""",
     "--commitAuthor ""$env:Build_RequestedFor""",
     "--commitEmail ""$env:Build_RequestedForEmail""",
-    "--commitMessage ""$env:Build_SourceVersionMessage""",
+    "--commitMessage ""$commitMessage""",
     "--serviceName ""$serviceName"""
 );
 if (Test-Path env:System_PullRequest_SourceBranch)
