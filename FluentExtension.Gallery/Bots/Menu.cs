@@ -11,30 +11,23 @@ namespace FluentExtension.Gallery.Bots
 {
     public class Menu
     {
-        public void Build(TypeBuilder<Menu> builder)
-        {
-            builder
-                .ChoicePrompt(x => x.Choices)
-                .NextStep(x => x.Selected);
 
-        }
-
-
-        public async Task Choices(TurnEventArgs e)
+        public void Choices(TurnEventArgs e)
         {
             // この実装コストを下げる
+            //return await e.DialogContext.PromptAsync(
+            //    "choice",
+            //    new PromptOptions
+            //    {
+            //        Prompt = MessageFactory.Text("次のメニューから選んでね！"),
+            //        Choices = choices,
+            //    },
+            //    e.CancellationToken);
 
-            // return await e.DialogContext.PromptAsync(
-            //     "choice",
-            //     new PromptOptions
-            //     {
-            //         Prompt = MessageFactory.Text("次のメニューから選んでね！"),
-            //         Choices = choices,
-            //     },
-            //     e.CancellationToken); 
+            // いや、非同期じゃないとダメ
+            e.WriteChoices(
+                "次のメニューから選んでね！", 
+                new[] { string.Empty, string.Empty, string.Empty });
         }
-        public async Task Selected(TurnEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+
     }

@@ -23,8 +23,12 @@ namespace FluentExtension.Gallery
         {
             activityBuilder
                 .ConversationUpdate<ConversationUpdate>()
-                .TextPrompt(x => x.Welcome)
-                    .AddChildren<Menu>(x => x.Build);
+                .Notify(x => x.Welcome)
+                .Push<Menu>()
+                    .Notify(x => x.Choices)
+
+
+
 
 
             activityBuilder

@@ -16,28 +16,19 @@ namespace FluentExtension.Gallery.Bots
     {
         public async Task Welcome(TurnEventArgs e)
         {
-            var turnContext = e.TurnContext;
-            var dialogContext = e.DialogContext;
             var activity = e.ConversationUpdateActivit;
-            
             if (activity.HasNewMember())
             {
                 // とりま、この実装コストを下げるようにする
-
                 // await turnContext.SendActivityAsync(MessageFactory.Text($"ようこそ！"));
                 // await dialogContext.BeginDialogAsync(nameof(MenuDialog), null, cancellationToken);
+
+                await e.WriteTextAsync("ようこそ！");
+
+                var builder = e.Next<Menu>();
+
+                await builder.
             }
         }
-
-
-        public async Task NextBuild(ActivityBuilder activityBuilder)
-        {
-            activityBuilder
-                    .TextPrompt()
-                    .NumberPrompt()
-                    .ConfirmPrompt()
-                    .ChoicePrompt()
-        }
-
     }
 }

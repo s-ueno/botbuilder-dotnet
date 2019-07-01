@@ -50,4 +50,8 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1516:Elements should be separated by blank line", Justification = "<保留中>", Scope = "member", Target = "~P:FluentExtension.ActivityBuilder.Owner")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TypeBindBot._isInitialized")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1300:Element should begin with upper-case letter", Justification = "<保留中>", Scope = "member", Target = "~P:FluentExtension.TypeBindBot._dialogs")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "<保留中>", Scope = "member", Target = "~P:FluentExtension.TurnEventArgs.CurrentStep")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TurnEventArgs.Steps")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TurnEventArgs.Steps")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TurnEventArgs.Steps")]
 

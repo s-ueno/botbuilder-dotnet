@@ -7,6 +7,7 @@ using System.Threading;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
+using Microsoft.Bot.Builder.Dialogs.Choices;
 
 namespace FluentExtension
 {
@@ -21,5 +22,23 @@ namespace FluentExtension
         public DialogContext DialogContext { get; protected internal set; }
 
         public IConversationUpdateActivity ConversationUpdateActivit { get; set; }
+
+        public Task WriteTextAsync(string message)
+        {
+            return TurnContext.SendActivityAsync(
+                MessageFactory.Text(message));
+        }
+
+        protected IList<(Guid id, PromptOptions options)> Steps
+            = new List<(Guid id, PromptOptions options)>();
+
+        public void WriteChoices(string message, IEnumerable<string> choices)
+        {
+            Steps.Add((Guid.NewGuid(), new PromptOptions
+            {
+                Prompt = MessageFactory.Text(message),
+                Choices = ChoiceFactory.ToChoices(choices.ToList()),
+            }));
+        }
     }
 }
