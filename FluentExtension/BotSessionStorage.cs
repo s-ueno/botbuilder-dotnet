@@ -10,11 +10,15 @@ namespace FluentExtension
     {
         public BotSessionStorage(
             UserState userState,
-            ConversationState conversationState)
+            ConversationState conversationState,
+            Action<ActivityBuilder> build)
         {
             UserState = userState;
             ConversationState = conversationState;
+            BuildMethod = build;
         }
+
+        public virtual Action<ActivityBuilder> BuildMethod { get; set; }
 
         /// <summary>
         /// Show the current state of the user and the Bot application.

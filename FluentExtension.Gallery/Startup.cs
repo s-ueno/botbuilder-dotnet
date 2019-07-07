@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 
+using FluentExtension.Gallery.Bots;
+
 namespace FluentExtension.Gallery
 {
     public class Startup
@@ -33,27 +35,15 @@ namespace FluentExtension.Gallery
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // bot 
-            services.DefaultInjection();
+            services.AddSingleton(x => new WelcomeBot());
 
-            #region 追加分
-
-
-#pragma warning disable CS0618 
-
-            services.AddBot<ShellBot>(options =>
+            // FluentExtension
+            services.AddShellBot(builder =>
             {
-                IStorage dataStore = new MemoryStorage();
-                var userState = new UserState(dataStore);
-                var conversationState = new ConversationState(dataStore);
-                options.State.Add(userState);
-                options.State.Add(conversationState);
+                var welcomeBuilder = builder.ChainConversationUpdate<WelcomeBot>();
+                welcomeBuilder
+                    .TextPrompt((x, e) => x.Welcome(e));
             });
-
-#pragma warning restore CS0618 
-
-            #endregion
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,9 +60,12 @@ namespace FluentExtension.Gallery
             }
 
             //app.UseHttpsRedirection();
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles();
 
+            app.UseBotFramework();
 
-            app.UseMvc();
+            //app.UseMvc();
         }
     }
 }

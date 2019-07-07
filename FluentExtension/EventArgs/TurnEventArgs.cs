@@ -13,13 +13,30 @@ namespace FluentExtension
 {
     public class TurnEventArgs : EventArgs
     {
+        public BotSessionStorage Storage { get; set; }
+
+        public DialogContext DialogContext { get; protected set; }
+
+        public ITurnContext TurnContext { get; set; }
+
+        public IActivity Activity { get; set; }
+
+        public ChannelAccount Account
+        {
+            get { return Activity?.Recipient; }
+        }
+
+        public string UserName
+        {
+            get { return Account?.Name; }
+        }
+
+        /*
         public ITurnContext TurnContext { get; protected internal set; }
 
         public CancellationToken CancellationToken { get; protected internal set; }
 
         public BotSessionStorage Storage { get; protected internal set; }
-
-        public DialogContext DialogContext { get; protected internal set; }
 
         public IConversationUpdateActivity ConversationUpdateActivit { get; set; }
 
@@ -40,5 +57,6 @@ namespace FluentExtension
                 Choices = ChoiceFactory.ToChoices(choices.ToList()),
             }));
         }
+        */
     }
 }

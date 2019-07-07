@@ -54,4 +54,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1401:Fields should be private", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TurnEventArgs.Steps")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TurnEventArgs.Steps")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:Field names should begin with lower-case letter", Justification = "<保留中>", Scope = "member", Target = "~F:FluentExtension.TurnEventArgs.Steps")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "<保留中>", Scope = "member", Target = "~P:FluentExtension.ActivityBuilder.ActivityType")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1201:Elements should appear in the correct order", Justification = "<保留中>", Scope = "member", Target = "~P:FluentExtension.ActivityBuilder.Actions")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1202:Elements should be ordered by access", Justification = "<保留中>", Scope = "member", Target = "~P:FluentExtension.ActivityBuilder.Instance")]
 

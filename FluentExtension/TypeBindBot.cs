@@ -13,11 +13,16 @@ namespace FluentExtension
 {
     public abstract class TypeBindBot : ActivityHandler
     {
+        public TypeBindBot(BotSessionStorage storage)
+            : this(storage, null)
+        {
+        }
+
         public TypeBindBot(BotSessionStorage storage, IRecognizer recognizer)
         {
-            this.Storage = storage;
-            this.Recognizer = recognizer;
-            this._dialogs = new DialogSet(storage?.ConversationDialogState);
+            Storage = storage;
+            Recognizer = recognizer;
+            _dialogs = new DialogSet(storage?.ConversationDialogState);
         }
 
         public BotSessionStorage Storage { get; protected set; }
@@ -26,23 +31,27 @@ namespace FluentExtension
 
         protected DialogSet _dialogs { get; set; }
 
+        protected ActivityBuilder Builder { get; set; }
+
+        protected bool Initialized { get; set; }
+
         public virtual void AddDialog(Dialog dialog)
         {
             this._dialogs.Add(dialog);
         }
 
-        public override Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
+        public override async Task OnTurnAsync(ITurnContext turnContext, CancellationToken cancellationToken = default)
         {
-            if (!_isInitialized)
+            if (!Initialized)
             {
-                Build(new ActivityBuilder(this));
-                _isInitialized = true;
+                Build(Builder);
+                Initialized = true;
             }
 
-            return base.OnTurnAsync(turnContext, cancellationToken);
-        }
+            await Builder.DoAsync(turnContext, cancellationToken);
 
-        private bool _isInitialized = false;
+            await base.OnTurnAsync(turnContext, cancellationToken);
+        }
 
         public abstract void Build(ActivityBuilder activityBuilder);
 

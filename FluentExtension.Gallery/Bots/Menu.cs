@@ -11,11 +11,10 @@ namespace FluentExtension.Gallery.Bots
 {
     public class Menu
     {
-
-        public void Choices(TurnEventArgs e)
+        public async Task Choices(TurnEventArgs e)
         {
             // この実装コストを下げる
-            //return await e.DialogContext.PromptAsync(
+            // return await e.DialogContext.PromptAsync(
             //    "choice",
             //    new PromptOptions
             //    {
@@ -25,9 +24,10 @@ namespace FluentExtension.Gallery.Bots
             //    e.CancellationToken);
 
             // いや、非同期じゃないとダメ
-            e.WriteChoices(
-                "次のメニューから選んでね！", 
-                new[] { string.Empty, string.Empty, string.Empty });
+            // ここは実行
+            // await e.WriteChoicesAsync(
+            //    "次のメニューから選んでね！",
+            //    new[] { string.Empty, string.Empty, string.Empty });
         }
-
     }
+}

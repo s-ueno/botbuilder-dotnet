@@ -13,48 +13,52 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FluentExtension
 {
+#pragma warning disable
+
     public static class IServiceCollectionExtension
     {
-        public static IServiceCollection DefaultInjection(this IServiceCollection services)
+        public static IServiceCollection AddShellBot(
+            this IServiceCollection services, 
+            Action<ActivityBuilder> build,
+            Action<BotFrameworkOptions> configureBotAction = null
+            )
         {
-            // Create the credential provider to be used with the Bot Framework Adapter.
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
-            // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>();
-
-#pragma warning disable CS0618 
 
             services.AddSingleton(sp =>
             {
-                // AddBot で登録した options を取得。
                 var options = sp.GetRequiredService<IOptions<BotFrameworkOptions>>().Value;
 
                 var userState = options?.State?.OfType<UserState>().FirstOrDefault();
                 var conversationState = options?.State?.OfType<ConversationState>().FirstOrDefault();
 
-                return new BotSessionStorage(userState, conversationState);
+                return new BotSessionStorage(userState, conversationState, build);
             });
 
-#pragma warning restore CS0618 
-
-            return services;
-        }
-
-        public static IServiceCollection AddBuilder<TBot>(
-            this IServiceCollection services, 
-            Action<BotFrameworkOptions> configureAction = null)
-        {
-            if (configureAction == null)
+            services.AddBot<SimpleShellBot>(options =>
             {
-
-            }
+                if (configureBotAction != null)
+                {
+                    configureBotAction(options);
+                }
+                else
+                {
+                    IStorage dataStore = new MemoryStorage();
+                    var userState = new UserState(dataStore);
+                    var conversationState = new ConversationState(dataStore);
+                    options.State.Add(userState);
+                    options.State.Add(conversationState);
+                }           
+            });         
             return services;
         }
-
-
     }
+#pragma warning restore
 }
