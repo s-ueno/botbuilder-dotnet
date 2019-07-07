@@ -35,8 +35,6 @@ namespace FluentExtension.Gallery
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSingleton(x => new WelcomeBot());
-
             // FluentExtension
             services.AddShellBot(builder =>
             {

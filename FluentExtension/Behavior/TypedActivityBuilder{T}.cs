@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace FluentExtension
 {
@@ -12,7 +13,6 @@ namespace FluentExtension
         {
         }
 
-        // refer <see cref="Microsoft.Extensions.DependencyInjection"/> for instance.
         public T TypedInstance { get; set; }
 
         public override object Instance
@@ -28,29 +28,21 @@ namespace FluentExtension
             }
         }
 
-        public TypedActivityBuilder<T> TextPrompt(Func<T, string> func)
-        {
-            return TextPrompt((x, e) => func(x));
-        }
 
-        public TypedActivityBuilder<T> TextPrompt(Func<T, TurnEventArgs, string> func)
+        public TypedActivityBuilder<T> TextPrompt(Action<T, TurnEventArgs> func)
         {
             return TextPrompt((x, e) => Task.Run(() => func(x, e)));
         }
 
-        public TypedActivityBuilder<T> TextPrompt(Func<T, Task<string>> func)
-        {
-            return TextPrompt((x, e) => func(x));
-        }
-
-        public TypedActivityBuilder<T> TextPrompt(Func<T, TurnEventArgs, Task<string>> func)
+        public TypedActivityBuilder<T> TextPrompt(Func<T, TurnEventArgs, Task> func)
         {
             return TextPromptRaw((x, e) => func((T)x, e));
         }
 
-        protected TypedActivityBuilder<T> TextPromptRaw(Func<object, TurnEventArgs, Task<string>> func)
+        protected TypedActivityBuilder<T> TextPromptRaw(Func<object, TurnEventArgs, Task> func)
         {
-            var invoker = new TextPromptInvoker(this, func);
+            var invoker = new ActionInvoker(this, func);
+            invoker.PromptType = typeof(TextPrompt);
             Actions.Add(invoker);
             return this;
         }

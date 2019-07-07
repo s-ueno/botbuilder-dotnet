@@ -14,16 +14,10 @@ namespace FluentExtension.Gallery.Bots
     // Class design should be Poco
     public class WelcomeBot
     {
-        public string Welcome(TurnEventArgs e)
+        public async Task Welcome(TurnEventArgs e)
         {
-            // hack まだ実装コストが高い
-            var activity = e.Activity.AsConversationUpdateActivity();
-            if (activity.MembersAdded.Any(member => member.Id != activity.Recipient.Id))
-            {
-                return $"ようこそ！ {e.UserName}さん";
-            }
-
-            return null;
+            // このくらい 手軽にコードできるようにしていく 
+            await e.SendTextAsync($"ようこそ！ {e.UserName}さん");
         }
 
         // 非同期で何かしらからデータ取得してもOK

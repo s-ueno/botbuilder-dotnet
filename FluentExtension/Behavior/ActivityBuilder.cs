@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace FluentExtension
         {
             this.Owner = bot;
         }
-        protected TypeBindBot Owner { get; set; }
+        public TypeBindBot Owner { get; protected set; }
 
         public abstract object Instance { get; }
 
@@ -38,7 +39,15 @@ namespace FluentExtension
             {
                 if (turnContext.Activity.Type == ActivityType)
                 {
-                    await each.DoAsync(turnContext, cancellationToken);
+                    // ConversationUpdate 
+                    if (ActivityType == ActivityTypes.ConversationUpdate)
+                    {
+                        var conversationUpdateActivity = turnContext.Activity.AsConversationUpdateActivity();
+                        if (conversationUpdateActivity.MembersAdded.Any(member => member.Id != conversationUpdateActivity.Recipient.Id))
+                        {
+                            await each.DoAsync(turnContext, cancellationToken);
+                        }
+                    }                    
                 }
             }
             foreach (var each in Children)
